@@ -254,7 +254,7 @@ function drawFeedback() {
     fill(120, 255, 160);
     textAlign(CENTER, TOP);
     textSize(36);
-    text("COMPLIANCE DETECTED", width / 2, 60);
+    text("SLAY HUMAN, YOU DID IT!", width / 2, 60);
 
     fill(255);
     textSize(16);
@@ -263,7 +263,7 @@ function drawFeedback() {
     fill(255, 130, 130);
     textAlign(CENTER, TOP);
     textSize(36);
-    text("NON-COMPLIANCE DETECTED", width / 2, 60);
+    text("SHUCKS NO COMPLIANCE...", width / 2, 60);
 
     fill(255);
     textSize(16);
