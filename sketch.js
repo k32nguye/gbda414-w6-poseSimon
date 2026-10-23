@@ -4,7 +4,7 @@ WEEK 6 WORKSHOP: POSE SIMON SAYS
 FULL SKETCH — STUDENT IN-CLASS ACTIVITY
 
 This is the base version of the project. It gives a prompt, watches for the
-requested pose during the prompt, and then displays feedback.
+requested pose during the prompt, and then applies the Simon Says rule.
 
 YOUR TASK:
 Change the confirmation and rejection feedback. You must change both:
@@ -42,9 +42,9 @@ const PROMPT_TIME = 4000;
 const RESULT_TIME = 2500;
 
 const prompts = [
-  { text: "Raise your left hand", action: "leftHandUp" },
-  { text: "Raise your right hand", action: "rightHandUp" },
-  { text: "Raise both hands", action: "bothHandsUp" }
+  { text: "Simon says raise your left hand", action: "leftHandUp", simonSays: true },
+  { text: "Raise your right hand", action: "rightHandUp", simonSays: false },
+  { text: "Simon says raise both hands", action: "bothHandsUp", simonSays: true }
 ];
 
 function preload() {
@@ -250,7 +250,24 @@ function drawFeedback() {
   fill(0, 190);
   rect(20, 20, width - 40, 220, 14);
 
-  if (actionDetected) {
+  // Simon Says has four possible outcomes:
+  // prefix + action and no prefix + no action are correct.
+  let correct = false;
+  let feedbackDetail = "";
+
+  if (currentPrompt.simonSays && actionDetected) {
+    correct = true;
+    feedbackDetail = "Simon said it, and you did it.";
+  } else if (currentPrompt.simonSays && !actionDetected) {
+    feedbackDetail = "Simon said it, but the pose was not detected.";
+  } else if (!currentPrompt.simonSays && actionDetected) {
+    feedbackDetail = "Simon did not say it, so that action was a trap.";
+  } else if (!currentPrompt.simonSays && !actionDetected) {
+    correct = true;
+    feedbackDetail = "Simon did not say it, and you stayed still.";
+  }
+
+  if (correct) {
     fill(120, 255, 160);
     textAlign(CENTER, TOP);
     textSize(36);
@@ -258,7 +275,7 @@ function drawFeedback() {
 
     fill(255);
     textSize(16);
-    text("The system recognized the requested pose.", width / 2, 140);
+    text(feedbackDetail, width / 2, 140);
   } else {
     fill(255, 130, 130);
     textAlign(CENTER, TOP);
@@ -267,7 +284,7 @@ function drawFeedback() {
 
     fill(255);
     textSize(16);
-    text("The system did not recognize the requested pose.", width / 2, 140);
+    text(feedbackDetail, width / 2, 140);
   }
 
   fill(255);
